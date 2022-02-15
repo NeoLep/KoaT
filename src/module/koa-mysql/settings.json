@@ -1,0 +1,9 @@
+{
+  "name": "koa-mysql",
+  "bin": "mysql.js",
+  "dir": "mysql",
+  "outputDir": "utils",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}

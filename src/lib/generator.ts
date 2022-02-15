@@ -20,7 +20,7 @@ export default class Generator {
     Dir.forEach(dirname => {
       const dir = `${this.modulePath}/${dirname}`
       const moduleFile = fs.readdirSync(dir);
-      if(moduleFile.includes('index.js') && moduleFile.includes('settings.json')) {
+      if(moduleFile.includes('settings.json')) {
         // const moduleConfig = require(`${dir}/settings.json`);
         dependices.push(dirname)
       }

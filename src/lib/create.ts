@@ -5,6 +5,7 @@ import * as inquirer from 'inquirer';
 import * as ora from "ora";
 
 const shell = require("shelljs");
+const moveFile = require("../static/moveFile");
 
 import Generator from "./generator"
 
@@ -14,6 +15,7 @@ export default class Create {
   public projectSrcDir: string;
   public modulePath: string;
   public projectName: string;
+  public configure: any;
 
   constructor(name: string, options: any, commander: any, downloadDirectory?: string) {
     if(downloadDirectory) this.downloadDirectory = downloadDirectory;
@@ -99,6 +101,8 @@ export default class Create {
     let configure = await inquirer.prompt(this.modulePrototype(modules))
 
     if(configure) {
+      this.configure = configure;
+      
       configure.name = name;
       generator.setPackageJson(configure);
       generator.renderDependices(configure.modules)
@@ -111,25 +115,26 @@ export default class Create {
         });
       }
 
+      // 装载 module
       configure.modules.forEach((item: any) => {
         const config = require(`${this.modulePath}/${item}/settings.json`)
-        let moduleRoot = `${this.modulePath}/${item}`
-        let target = `${this.projectSrcDir}/${config.dir}`
-        this.exists(moduleRoot, target, this.copyFile)
+
+        // 如果 特殊目录不存在先创建
+        if (config.outputDir && !fs.existsSync(`${this.projectSrcDir}/${config.outputDir}`)) fs.mkdirSync(`${this.projectSrcDir}/${config.outputDir}`)
+
+
+        let moduleRoot = `${this.modulePath}/${item}/${config.dir}`
+        let target = `${this.projectSrcDir}/${config.outputDir ? config.outputDir + '/' + config.dir : config.dir}`
+        // console.log(moduleRoot, target);
+        moveFile(moduleRoot, target)
+
       })
       this.renderAppJS(configure)
 
     }
-
     
   }
 
-
-  async downloadTemplate(configure: any) {
-    console.log(configure);
-    console.log(this.downloadDirectory);
-    // const result = await downloadGR
-  }
 
   renderAppJS(configure: any) {
     const ejs = require("ejs");
@@ -163,12 +168,19 @@ export default class Create {
     fs.writeFile(this.projectSrcDir+ "/app.js", data, error => {
       if (error) return console.log("写入文件失败" + error.message);
       console.log(chalk.green("build success"));
-      const spinner = ora(chalk.green('npm install')).start();
       const projectName = this.projectName;
-      shell.exec(`
+      
+      if(this.configure.install !== 'y' || this.configure.install !== 'Y') {
+        console.log();
+        console.log(chalk.green("cd " + projectName));
+        console.log(chalk.green("npm install"));
+        console.log(chalk.green("npm run serve"));
+      } else {
+        const spinner = ora(chalk.green('npm install')).start();
+        shell.exec(`
           cd ${this.projectName}
           npm install
-      `, function() {
+        `, function() {
         spinner.stopAndPersist({
           symbol: "✅",
           text: `${chalk.green('install Complete')}`,
@@ -177,6 +189,7 @@ export default class Create {
         console.log(chalk.green("cd " + projectName));
         console.log(chalk.green("npm run serve"));
       })
+      }
     });
   }
 
@@ -192,54 +205,13 @@ export default class Create {
       message: "select detail config:",
       choices: modules
     }
-    return [description, module]
+    let Install: any = {
+      name: 'install',
+      type: 'input',
+      message: "auto install: (y/n)"
+    }
+    return [description, module, Install]
   }
-
-  exists(src: string, dst: string, callback: any) {
-    //测试某个路径下文件是否存在
-    fs.exists(dst, function(exists) {
-      if (exists) {
-        //不存在
-        callback(src, dst);
-      } else {
-        //存在
-        fs.mkdir(dst, function() {
-          //创建目录
-          callback(src, dst);
-        });
-      }
-    });
-  }
-
-  copyFile(src: string, dst: string) {
-    const stat = fs.stat;
-    //读取目录
-    fs.readdir(src, function(err, paths) {
-      // console.log(paths);
-      if (err) {
-        throw err;
-      }
-      paths.forEach(function(path) {
-        var _src = src + "/" + path;
-        var _dst = dst + "/" + path;
-        var readable;
-        var writable;
-        stat(_src, function(err, st) {
-          if (err) {
-            throw err;
-          }
-  
-          if (st.isFile()) {
-            readable = fs.createReadStream(_src); //创建读取流
-            writable = fs.createWriteStream(_dst); //创建写入流
-            readable.pipe(writable);
-          } else if (st.isDirectory()) {
-            this.exists(_src, _dst, this.copyFile);
-          }
-        });
-      });
-    });
-  };
 
   transform(str: string): any {
     let arr = str.split("-");

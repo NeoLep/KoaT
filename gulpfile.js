@@ -114,6 +114,7 @@ var exists = function(src, dst, callback) {
 function extraBuildStatic() {
   // fs.mkdir("./build/static", (err, data) => {});
   exists("./src/static", "./build/src/static", copy);
+  exists("./src/module", "./build/src/module", copy);
 }
 
 exports.default = series(init);

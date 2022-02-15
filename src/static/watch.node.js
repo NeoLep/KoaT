@@ -7,8 +7,9 @@ let debounceRestart = debounce(restart, 500);
 
 // One-liner for current directory
 chokidar.watch(["*"]).on("all", (event, path) => {
-  console.log(event, path);
-
+  // console.log(event, path);
+  process.stdout.cursorTo(0, 0);
+  process.stdout.clearScreenDown();
   debounceRestart();
 });
 
