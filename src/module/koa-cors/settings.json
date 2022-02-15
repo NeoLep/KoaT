@@ -1,0 +1,7 @@
+{
+  "name": "koa-cors",
+  "dir": "cors",
+  "dependencies": {
+    "koa-cors": "^0.0.16"
+  }
+}

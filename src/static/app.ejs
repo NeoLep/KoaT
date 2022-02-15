@@ -1,0 +1,14 @@
+const Koa = require("koa");
+
+<% for(let i=0; i < modules.length; i++) { %>
+const <%= variable[i] %> = require("./<%= modules[i] %>");<% } %>
+
+const port = 3300
+const app = new Koa;
+
+<% for(let i=0; i < modules.length; i++) { %>
+new <%= variable[i] %>(app);<% } %>
+
+app.listen(port, () => {
+  console.log("Server is running at port: " + port);
+});
