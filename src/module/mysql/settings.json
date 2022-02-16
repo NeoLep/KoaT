@@ -1,5 +1,5 @@
 {
-  "name": "koa-mysql",
+  "name": "mysql",
   "bin": "mysql.js",
   "dir": "mysql",
   "outputDir": "utils",

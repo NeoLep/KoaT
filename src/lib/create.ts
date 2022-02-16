@@ -18,7 +18,7 @@ export default class Create {
   public configure: any;
 
   constructor(name: string, options: any, commander: any, downloadDirectory?: string) {
-    if(downloadDirectory) this.downloadDirectory = downloadDirectory;
+    if (downloadDirectory) this.downloadDirectory = downloadDirectory;
     this.projectName = name;
     this.createFile(name, options, commander)
   }
@@ -40,7 +40,7 @@ export default class Create {
     const targetDir = path.resolve(cwd, name || ".")
     this.projectRootDir = targetDir;
     this.projectSrcDir = targetDir + "/src";
-    
+
     const DirExists = fs.existsSync(targetDir)
 
     // 判断目录是否存在
@@ -48,14 +48,14 @@ export default class Create {
       // console.log(commander.fileExistsComander);
       console.log(chalk.red("project root dir:  ") + this.projectRootDir);
       let action = await this.createInquirer(commander.fileExistsComander);
-      if(action) {
+      if (action) {
         const spinner = ora(`${chalk.green('delete')} ` + name).start();
         fs.remove(targetDir).then(() => {
           spinner.stopAndPersist({
             symbol: "✅",
             text: `${chalk.green('Delete Complete')}`,
           })
-          for(let i = 0; i < 3; i++) console.log();
+          for (let i = 0; i < 3; i++) console.log();
           this.selectTemplate(name, options)
         })
       }
@@ -74,7 +74,7 @@ export default class Create {
           name: MessageConfig.confirm,
           value: true
         }, {
-          name:  MessageConfig.cancel,
+          name: MessageConfig.cancel,
           value: false
         }
       ]
@@ -86,31 +86,31 @@ export default class Create {
     })
   }
 
-  async selectTemplate(name:string, options: any, debug: boolean = false) {
+  async selectTemplate(name: string, options: any, debug: boolean = false) {
     this.modulePath = path.resolve(`${__dirname}`, '../module/');
 
-    if(!debug) fs.mkdir(this.projectRootDir, () => {
-      fs.mkdir(this.projectSrcDir, () => {});
+    if (!debug) fs.mkdir(this.projectRootDir, () => {
+      fs.mkdir(this.projectSrcDir, () => { });
     });
 
     // console.log(chalk.green('select options'));
-    
+
     const generator = new Generator();
     const modules = generator.generatorDir();
-    
+
     let configure = await inquirer.prompt(this.modulePrototype(modules))
 
-    if(configure) {
+    if (configure) {
       this.configure = configure;
-      
+
       configure.name = name;
       generator.setPackageJson(configure);
       generator.renderDependices(configure.modules)
       // console.log("package.json", generator.packageJson);
 
       // 写入 package.json
-      if(!debug) {
-        fs.writeFile(this.projectRootDir+ "/package.json", JSON.stringify(generator.packageJson, null, 2), error => {
+      if (!debug) {
+        fs.writeFile(this.projectRootDir + "/package.json", JSON.stringify(generator.packageJson, null, 2), error => {
           if (error) return console.log("写入文件失败" + error.message);
         });
       }
@@ -119,20 +119,35 @@ export default class Create {
       configure.modules.forEach((item: any) => {
         const config = require(`${this.modulePath}/${item}/settings.json`)
 
-        // 如果 特殊目录不存在先创建
-        if (config.outputDir && !fs.existsSync(`${this.projectSrcDir}/${config.outputDir}`)) fs.mkdirSync(`${this.projectSrcDir}/${config.outputDir}`)
+        const moduleRoot = `${this.modulePath}/${item}/${config.dir}`
+        const target = `${this.projectSrcDir}/${config.outputDir ? config.outputDir + '/' + config.dir : config.dir}`
+        const targetDir = config.outputDir ? config.outputDir + '/' + config.dir : config.dir;
 
+        const targetDirSplit = targetDir.split("/");
+        const source = targetDirSplit.map((item: string, index: number) => {
+          if (index != 0) {
+            let str = "";
+            for (let i = 0; i <= index; i++) {
+              str += "/" + targetDirSplit[i];
+            }
+            return str;
+          }
+          return "/" + item;
+        });
+        source.forEach((item: any) => {
+          // 如果目录不存在先创建
+          if (!fs.existsSync(this.projectSrcDir + item)) {
+            fs.mkdirSync(this.projectSrcDir + item)
+          }
+        })
 
-        let moduleRoot = `${this.modulePath}/${item}/${config.dir}`
-        let target = `${this.projectSrcDir}/${config.outputDir ? config.outputDir + '/' + config.dir : config.dir}`
-        // console.log(moduleRoot, target);
         moveFile(moduleRoot, target)
 
       })
       this.renderAppJS(configure)
 
     }
-    
+
   }
 
 
@@ -141,8 +156,12 @@ export default class Create {
     // configure.modules
     const modules: any = [];
     const variable: any = [];
-    
+
+    // 在 app.js 中渲染 koa- 开头的 module
     configure.modules.forEach((item: any) => {
+      const reg = /^koa-(\w*)/
+      if (!reg.test(item)) return;
+
       const config = require(`${this.modulePath}/${item}/settings.json`)
       modules.push(config.dir);
       variable.push(this.transform(config.name));
@@ -153,7 +172,7 @@ export default class Create {
 
     const staticDir = path.resolve(`${__dirname}`, '../static/');
 
-    ejs.renderFile(staticDir + "/app.ejs", { modules, variable },(err: any, data: any) => {
+    ejs.renderFile(staticDir + "/app.ejs", { modules, variable }, (err: any, data: any) => {
       if (err) console.log(err);
       else this.WriteAppJS(data);
     });
@@ -164,13 +183,13 @@ export default class Create {
     const readable = fs.createReadStream(`${staticDir}/watch.node.js`); //创建读取流
     const writable = fs.createWriteStream(`${this.projectRootDir}/watch.node.js`); //创建写入流
     readable.pipe(writable);
-    
-    fs.writeFile(this.projectSrcDir+ "/app.js", data, error => {
+
+    fs.writeFile(this.projectSrcDir + "/app.js", data, error => {
       if (error) return console.log("写入文件失败" + error.message);
       console.log(chalk.green("build success"));
       const projectName = this.projectName;
-      
-      if(this.configure.install !== 'y' || this.configure.install !== 'Y') {
+
+      if (this.configure.install !== 'y' || this.configure.install !== 'Y') {
         console.log();
         console.log(chalk.green("cd " + projectName));
         console.log(chalk.green("npm install"));
@@ -180,15 +199,15 @@ export default class Create {
         shell.exec(`
           cd ${this.projectName}
           npm install
-        `, function() {
-        spinner.stopAndPersist({
-          symbol: "✅",
-          text: `${chalk.green('install Complete')}`,
+        `, function () {
+          spinner.stopAndPersist({
+            symbol: "✅",
+            text: `${chalk.green('install Complete')}`,
+          })
+          console.log();
+          console.log(chalk.green("cd " + projectName));
+          console.log(chalk.green("npm run serve"));
         })
-        console.log();
-        console.log(chalk.green("cd " + projectName));
-        console.log(chalk.green("npm run serve"));
-      })
       }
     });
   }
