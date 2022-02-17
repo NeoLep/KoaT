@@ -7,6 +7,7 @@ function buildTS() {
   console.log(chalk.green("building...."));
   exec("tsc", (err, stderr) => {
     if (!err) {
+      extraBuildStatic();
       console.log(chalk.green("build success, in ./build"));
     } else {
       console.log(chalk.red("build failed, please try to rebuild"));
@@ -61,10 +62,10 @@ const exists = function(src, dst, callback) {
 
 // function
 function extraBuildStatic() {
+  console.log("move");
   // fs.mkdir("./build/static", (err, data) => {});
   exists("./src/static", "./build/src/static", copy);
   exists("./src/module", "./build/src/module", copy);
 }
 
 buildTS();
-extraBuildStatic();
