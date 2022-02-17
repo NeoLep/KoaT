@@ -102,7 +102,6 @@ export default class Create {
 
     if (configure) {
       this.configure = configure;
-
       configure.name = name;
       generator.setPackageJson(configure);
       generator.renderDependices(configure.modules)
@@ -117,35 +116,42 @@ export default class Create {
 
       // 装载 module
       configure.modules.forEach((item: any) => {
+        // 获取 module 的 settings 中的配置
         const config = require(`${this.modulePath}/${item}/settings.json`)
 
         const moduleRoot = `${this.modulePath}/${item}/${config.dir}`
         const target = `${this.projectSrcDir}/${config.outputDir ? config.outputDir + '/' + config.dir : config.dir}`
         const targetDir = config.outputDir ? config.outputDir + '/' + config.dir : config.dir;
 
-        const targetDirSplit = targetDir.split("/");
-        const source = targetDirSplit.map((item: string, index: number) => {
-          if (index != 0) {
-            let str = "";
-            for (let i = 0; i <= index; i++) {
-              str += "/" + targetDirSplit[i];
-            }
-            return str;
-          }
-          return "/" + item;
-        });
-        source.forEach((item: any) => {
-          // 如果目录不存在先创建
-          if (!fs.existsSync(this.projectSrcDir + item)) {
-            fs.mkdirSync(this.projectSrcDir + item)
-          }
-        })
-
+        this.createTargetDir("$root" ,targetDir);
         moveFile(moduleRoot, target)
+        
+        // 分析是否存在额外需要输出的文件或目录
+        if(config.extraFileTarget) {
+          // 判断是否存在 module 目录
+          const extraModuleFile = config.extraFileTarget;
+          const sourceURL: any = [];
+          const targetURL = [];
+          for(let key in extraModuleFile) {
+            let extraModuleURL = this.modulePath + "/" + item + "/" + key;
+            if(fs.existsSync(extraModuleURL)) {
+              sourceURL.push(extraModuleURL)
+              targetURL.push(this.projectRootDir + "/" + extraModuleFile[key])
+            }
+          }
 
+          targetURL.forEach((item, index) => {
+            this.createTargetDir("", item);
+            moveFile(sourceURL[index], item)
+          })
+
+          // fs.existsSync(this.modulePath + item)
+          // this.createTargetDir(this.projectSrcDir ,targetDir);
+        }
+        
       })
-      this.renderAppJS(configure)
 
+      this.renderAppJS(configure)
     }
 
   }
@@ -163,8 +169,17 @@ export default class Create {
       if (!reg.test(item)) return;
 
       const config = require(`${this.modulePath}/${item}/settings.json`)
-      modules.push(config.dir);
-      variable.push(this.transform(config.name));
+      
+
+      // 有的模块可能需要先挂载 比如 static
+      if(config.loadIndex) {
+        modules.splice(config.loadIndex, 0, config.dir)
+        variable.splice(config.loadIndex, 0, this.transform(config.name));
+      }
+      else {
+        modules.push(config.dir);
+        variable.push(this.transform(config.name));
+      }
     });
 
     // ejs 模版变量
@@ -189,12 +204,7 @@ export default class Create {
       console.log(chalk.green("build success"));
       const projectName = this.projectName;
 
-      if (this.configure.install !== 'y' || this.configure.install !== 'Y') {
-        console.log();
-        console.log(chalk.green("cd " + projectName));
-        console.log(chalk.green("npm install"));
-        console.log(chalk.green("npm run serve"));
-      } else {
+      if (this.configure.install === 'y' || this.configure.install === 'Y'){
         const spinner = ora(chalk.green('npm install')).start();
         shell.exec(`
           cd ${this.projectName}
@@ -208,6 +218,11 @@ export default class Create {
           console.log(chalk.green("cd " + projectName));
           console.log(chalk.green("npm run serve"));
         })
+      } else {
+          console.log();
+          console.log(chalk.green("cd " + projectName));
+          console.log(chalk.green("npm install"));
+          console.log(chalk.green("npm run serve"));
       }
     });
   }
@@ -241,5 +256,27 @@ export default class Create {
       trans += upper;
     });
     return trans;
+  }
+
+  createTargetDir(base: string, targetDir: string) {
+    if(base === '$root') base = this.projectSrcDir;
+    // 切割目标地址，一层层判断并创建
+    const targetDirSplit = targetDir.split("/");
+    const source = targetDirSplit.map((item: string, index: number) => {
+      if (index != 0) {
+        let str = "";
+        for (let i = 0; i <= index; i++) {
+          str += "/" + targetDirSplit[i];
+        }
+        return str;
+      }
+      return "/" + item;
+    });
+    source.forEach((item: any) => {
+      // 如果目录不存在先创建
+      if (!fs.existsSync(base + item)) {
+        fs.mkdirSync(base + item)
+      }
+    })
   }
 }

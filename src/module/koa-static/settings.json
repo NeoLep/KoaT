@@ -1,0 +1,11 @@
+{
+  "name": "koa-static",
+  "dir": "static",
+  "loadIndex": 1,
+  "extraFileTarget": {
+    "public": "public"
+  },
+  "dependencies": {
+    "koa-static": "^5.0.0"
+  }
+}

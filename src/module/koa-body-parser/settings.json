@@ -1,0 +1,7 @@
+{
+  "name": "koa-body-parser",
+  "dir": "body-parser",
+  "dependencies": {
+    "koa-bodyparser": "^4.3.0"
+  }
+}
