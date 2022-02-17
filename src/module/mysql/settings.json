@@ -1,6 +1,6 @@
 {
   "name": "mysql",
-  "bin": "mysql.js",
+  "bin": "Mysql.class.js",
   "dir": "mysql",
   "outputDir": "utils",
   "dependencies": {
