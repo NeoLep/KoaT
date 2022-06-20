@@ -13,3 +13,12 @@ app.listen(port, () => {
    console.log("koa server is running at port: " + port);
    console.log("server at http://localhost:3300");
 });
+
+const Koat = require('./Koat')
+<% for(let i=0; i < moduleTree.length; i++) { %>
+const <%= variable[i] %> = require("./<%= modules[i] %>");<% } %>
+const router = require('./router')
+
+new Koat({
+  router
+})

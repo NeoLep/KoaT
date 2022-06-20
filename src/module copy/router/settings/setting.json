@@ -1,0 +1,17 @@
+{
+  "moduleName": "router",
+  "moduleDir": "router",
+  "outputPath": "/",
+  "extraFile": [
+    {
+      "type": "file",
+      "path": "readme.md",
+      "to": "/"
+    },
+    {
+      "type": "dir",
+      "path": "readMe",
+      "to": "/"
+    }
+  ]
+}

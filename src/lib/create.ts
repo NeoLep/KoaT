@@ -1,8 +1,9 @@
 import * as chalk from 'chalk';
-import * as path from 'path';
-import * as fs from 'fs-extra';
 import * as inquirer from 'inquirer';
 import * as ora from "ora";
+import * as path from 'path';
+import * as fs from 'fs-extra';
+
 
 const shell = require("shelljs");
 const moveFile = require("../static/moveFile");
@@ -18,6 +19,7 @@ export default class Create {
   public configure: any;
 
   constructor(name: string, options: any, commander: any, downloadDirectory?: string) {
+    console.log(name, options, commander, downloadDirectory);
     if (downloadDirectory) this.downloadDirectory = downloadDirectory;
     this.projectName = name;
     this.createFile(name, options, commander)

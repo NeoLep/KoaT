@@ -1,0 +1,9 @@
+{
+  "name": "sqlite",
+  "bin": "Sqlite.class.js",
+  "dir": "sqlite",
+  "outputDir": "utils",
+  "dependencies": {
+    "sqlite3": "^5.0.8"
+  }
+}

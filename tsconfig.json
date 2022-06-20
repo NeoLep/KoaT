@@ -9,13 +9,18 @@
       "outDir":"./build",     //重定向输出目录。   
       "watch": false,            //在监视模式下运行编译器。会监视输出文件，在它们改变时重新编译。
       "resolveJsonModule": true,
-      "allowJs": true
+      "allowJs": true,
+      "baseUrl": "./",
+      "paths": {
+        "@/*": ["./src/*"]
+      }
   },
   "include":[
       "./src/*",
       "index.ts",
       "package.json",
-      "./src/config/*.json"
+      "./src/config/*.json",
+      "./src/lib/*/*.json"
   ],
   "exclude":[
       "views",

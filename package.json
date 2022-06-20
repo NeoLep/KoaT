@@ -1,6 +1,6 @@
 {
   "name": "koat-cli",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "a koa fast init template",
   "main": "index.js",
   "bin": {
@@ -14,22 +14,26 @@
   "author": "Leep",
   "license": "ISC",
   "dependencies": {
-    "cfonts": "^2.10.0",
-    "chalk": "^4.1.2",
-    "commander": "^9.0.0",
-    "download-git-repo": "^3.0.2",
-    "fs-extra": "^10.0.0",
-    "inquirer": "^8.2.0",
-    "ora": "^5.4.1",
-    "shelljs": "^0.8.5"
-  },
-  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "@types/inquirer": "^8.2.0",
     "axios": "^0.25.0",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "cfonts": "^2.10.0",
+    "chalk": "^4.1.2",
+    "commander": "^9.0.0",
+    "download-git-repo": "^3.0.2",
+    "ejs": "^3.1.8",
+    "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "gulp-watch": "^5.0.1"
+    "gulp-watch": "^5.0.1",
+    "inquirer": "^8.2.0",
+    "module-alias": "^2.2.2",
+    "ora": "^5.4.1",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^4.1.0"
   }
 }

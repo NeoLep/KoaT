@@ -1,0 +1,19 @@
+[
+  {
+    "name": "description",
+    "type": "text",
+    "message": "please input your description about this project:"
+  },
+  {
+    "name": "modules",
+    "type": "checkbox",
+    "message": "select detail config:",
+    "choices": []
+  },
+  {
+    "name": "install",
+    "type": "confirm",
+    "message": "install node_modules?",
+    "default": "Y"
+  }
+]
