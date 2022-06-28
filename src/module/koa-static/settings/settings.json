@@ -1,0 +1,15 @@
+{
+  "moduleName": "koa-static",
+  "moduleDir": "/koa-static",
+  "outputPath": "/koa-static",
+  "dependencies": {
+    "koa-static": "^5.0.0"
+  },
+  "extra": [
+    {
+      "type": "dir",
+      "source": "/public",
+      "target": "@root/public"
+    }
+  ]
+}

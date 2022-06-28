@@ -5,16 +5,20 @@
   "dependencies": {
     "koa-router": "^10.0.0"
   },
+  "dependenciesMerge": {
+    "default": "self",
+    "koa-router": "up"
+  },
   "extra": [
     {
       "type": "file",
       "source": "/readme.md",
-      "target": "/"
+      "target": "@src/readme.md"
     },
     {
       "type": "dir",
       "source": "/readMe",
-      "target": "/"
+      "target": "/readMeDir"
     }
   ]
 }

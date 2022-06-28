@@ -5,17 +5,16 @@
  * @author: Leep
  * @Date: 2022-02-11 08:20:47
  * @LastEditors: Leep
- * @LastEditTime: 2022-06-18 08:34:11
+ * @LastEditTime: 2022-06-28 10:25:54
  */
 import * as path from 'path';
 import * as fs from 'fs-extra';
-import * as chalk from 'chalk';
 
 import Banner from "./lib/banner" // banner图
 import Commander from "./lib/commander" // commander 生成
 import Menu from "./lib/menu" // 生成选项
-import Loader from "./lib/loader"
-import Origin from "./origin"
+import Loader from "./lib/loader" // 装载器
+import Origin from "./origin" // 原始配置
 
 export class Main {
 
@@ -37,11 +36,6 @@ export class Main {
       projectInfo,
       ...generator // choosen, moduleTree
     })
-      // new Menu().menuGenerator().then((generator: any) => {
-      //   // console.log(generator);
-      //   new Loader(options, generator)
-      // })
-      // new Create(options.name, options.options, this.origin.commanderConfig, this.origin.downloadDirectory);
   }
   
   projectInfoBuilder(options: any) {

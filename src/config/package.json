@@ -1,17 +1,18 @@
 {
-  "name": null,
+  "name": "",
   "version": "0.0.1",
-  "description": null,
+  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo 'Error: no test specified' && exit 1",
-    "serve": "node ./watch.node.js"
+    "serve": "nodemon ./src/app.js"
   },
   "keywords": [],
   "author": "write your name",
   "license": "ISC",
   "dependencies": {
     "chokidar": "^3.5.3",
-    "koa2": "^2.0.0-alpha.7"
+    "koa": "^2.13.4",
+    "nodemon": "^2.0.18"
   }
 }

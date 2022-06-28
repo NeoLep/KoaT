@@ -1,0 +1,6 @@
+const Koat = require("./Koat")<% for(let i=0;i<moduleTree.length;i++){ %>
+const <%= moduleTree[i].requireName %> = require(".<%= moduleTree[i].outputPath %>")<% } %>
+
+new Koat({<% for(let i=0;i<moduleTree.length;i++){ %>
+  <%= moduleTree[i].requireName %>,<% } %>
+}).listen(<%= port %>)

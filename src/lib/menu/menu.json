@@ -11,6 +11,12 @@
     "choices": []
   },
   {
+    "name": "port",
+    "type": "number",
+    "message": "please input you want using port",
+    "default": 3000
+  },
+  {
     "name": "install",
     "type": "confirm",
     "message": "install node_modules?",

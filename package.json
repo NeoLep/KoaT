@@ -1,6 +1,6 @@
 {
   "name": "koat-cli",
-  "version": "1.1.9",
+  "version": "2.0.0",
   "description": "a koa fast init template",
   "main": "index.js",
   "bin": {
@@ -14,8 +14,10 @@
   "author": "Leep",
   "license": "ISC",
   "dependencies": {
+    "@types/ejs": "^3.1.1",
     "@types/fs-extra": "^9.0.13",
     "@types/inquirer": "^8.2.0",
+    "@types/shelljs": "^0.8.11",
     "axios": "^0.25.0",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
