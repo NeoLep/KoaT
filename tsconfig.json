@@ -18,6 +18,7 @@
   "include":[
       "./src/*",
       "index.ts",
+      "README.md",
       "package.json",
       "./src/config/*.json",
       "./src/lib/*/*.json"

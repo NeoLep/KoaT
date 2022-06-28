@@ -5,7 +5,7 @@
  * @author: Leep
  * @Date: 2022-06-18 00:30:52
  * @LastEditors: Leep
- * @LastEditTime: 2022-06-28 10:37:40
+ * @LastEditTime: 2022-06-28 15:12:17
  */
 import FileOperator from "../../utils/file-operator"
 import ModuleManage from "../../utils/module-manage"
@@ -171,11 +171,10 @@ export default class Loader {
   }
 
   autoInstall() {
-    const spinner = ora(chalk.green('npm install')).start();
-    shell.exec(`
-      cd ${this.projectTree.projectInfo.root}
-      npm install
-    `,() => {
+    console.log(this.projectTree.projectInfo.root);
+    const spinner = ora(chalk.green('install....  ')).start();
+    shell.cd(this.projectTree.projectInfo.root)
+    shell.exec('npm install', () => {
       spinner.stopAndPersist({
         symbol: "✅",
         text: `${chalk.green('install Complete')}`,

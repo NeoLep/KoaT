@@ -1,10 +1,10 @@
 {
-  "name": "koat-cli",
-  "version": "1.0.0",
-  "description": "a koa fast init template",
+  "name": "koa_c1i",
+  "version": "1.0.6",
+  "description": "a koa cli fast init template",
   "main": "index.js",
   "bin": {
-    "koat": "./build/index.js"
+    "koat": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -33,9 +33,7 @@
     "inquirer": "^8.2.0",
     "module-alias": "^2.2.2",
     "ora": "^5.4.1",
-    "shelljs": "^0.8.5"
-  },
-  "devDependencies": {
+    "shelljs": "^0.8.5",
     "babel-plugin-module-resolver": "^4.1.0"
   }
 }
