@@ -1,6 +1,6 @@
 {
   "name": "koat-cli",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "a koa fast init template",
   "main": "index.js",
   "bin": {

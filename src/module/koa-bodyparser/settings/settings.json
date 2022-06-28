@@ -1,0 +1,10 @@
+{
+  "before": [],
+  "moduleName": "koa-bodyparser",
+  "moduleDir": "/koa-bodyparser",
+  "outputPath": "/utils/koa-bodyparser",
+  "dependencies": {
+    "koa-bodyparser": "^4.3.0"
+  },
+  "extra": []
+}
