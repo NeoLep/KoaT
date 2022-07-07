@@ -1,6 +1,7 @@
 {
-  "moduleName": "router",
-  "moduleDir": "/router",
+  "before": ["koa-compose"],
+  "moduleName": "koa-router",
+  "moduleDir": "/koa-router",
   "outputPath": "/router",
   "dependencies": {
     "koa-router": "^10.0.0"

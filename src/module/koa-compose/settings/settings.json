@@ -1,0 +1,8 @@
+{
+  "moduleName": "koa-compose",
+  "moduleDir": "/koa-compose",
+  "outputPath": "/utils/koa-compose",
+  "dependencies": {
+    "koa-compose": "^4.1.0"
+  }
+}

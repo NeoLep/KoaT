@@ -1,4 +1,5 @@
 {
+  "before": ["koa-router"],
   "moduleName": "koa-static",
   "moduleDir": "/koa-static",
   "outputPath": "/utils/koa-static",

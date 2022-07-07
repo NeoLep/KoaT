@@ -1,11 +1,10 @@
 {
-  "before": ["router"],
+  "before": ["koa-router"],
   "moduleName": "koa-cors",
   "moduleDir": "/koa-cors",
   "outputPath": "/utils/koa-cors",
   "dependencies": {
     "koa-cors": "^0.0.16"
   },
-  "beforeModules": ["routers"],
   "extra": []
 }

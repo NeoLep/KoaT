@@ -5,7 +5,7 @@
  * @author: Leep
  * @Date: 2022-06-18 00:30:52
  * @LastEditors: Leep
- * @LastEditTime: 2022-06-28 15:12:17
+ * @LastEditTime: 2022-07-06 16:05:45
  */
 import FileOperator from "../../utils/file-operator"
 import ModuleManage from "../../utils/module-manage"
@@ -111,6 +111,7 @@ export default class Loader {
   }
 
   renderAppJS() {
+    this.fo.copy(`${this.staticPath}/indexPage.ejs`, `${this.projectTree.projectInfo.src}/Koat/index.ejs`)
     this.fo.copy(`${this.staticPath}/Koat.js`, `${this.projectTree.projectInfo.src}/Koat/index.js`)
     
     fs.writeFileSync(`${this.projectTree.projectInfo.src}/Koat/initTree.json`, JSON.stringify(this.projectTree, null, 2))
@@ -143,7 +144,8 @@ export default class Loader {
       moduleElement.moduleIndexTargetJSPath = moduleElement.moduleTargetPath + '/index.js'
       moduleElement.dependencies = module.dependencies // 依赖实例
       moduleElement.dependenciesMerge = module.dependenciesMerge // 依赖冲突处理
-      moduleElement.extraFile = module.extra.map((extraItem: any) => {
+      
+      moduleElement.extraFile = !module.extra ? [] : module.extra.map((extraItem: any) => {
         
         const pathDiv = extraItem.target.split('/');
         if(pathDiv[0] === '') pathDiv.splice(0, 1)
@@ -163,6 +165,7 @@ export default class Loader {
           targetPath: prevPath + '/' + pathDiv.join('/')
         }
       })
+
       moduleElement.requireName = module.moduleName.replace(/-(\w)/g,($0: any, $1: any) => {
         return $1.toUpperCase();
       }) // 获取引入名称，驼峰处理

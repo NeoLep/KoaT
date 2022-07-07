@@ -1,0 +1,17 @@
+{
+  "before": ["koa-router"],
+  "moduleName": "koa-views",
+  "moduleDir": "/koa-views",
+  "outputPath": "/utils/koa-views",
+  "dependencies": {
+    "koa-views": "^8.0.0",
+    "ejs": "^3.1.8"
+  },
+  "extra": [
+    {
+      "type": "dir",
+      "source": "/views",
+      "target": "@root/public/views"
+    }
+  ]
+}
